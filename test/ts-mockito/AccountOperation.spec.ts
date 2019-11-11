@@ -39,4 +39,14 @@ describe('ts-mockito', () => {
 
         assert.equal(op.sumAccounts(['a', 'b', 'c']), 2);
     });
+
+    it('should retry getting account on network failures', () => {
+        when(accountStore.getAccountById('b')).thenThrow(new Error('NetworkError')).thenReturn(instance(account1));
+        assert.equal(op.sumAccounts(['a', 'b', 'c']), 3);
+    });
+
+    it('should fail on other errors', () => {
+        when(accountStore.getAccountById('b')).thenThrow(new Error('OtherError'));
+        assert.throws(() => op.sumAccounts(['a', 'b', 'c']), 'failed to fetch b');
+    });
 });

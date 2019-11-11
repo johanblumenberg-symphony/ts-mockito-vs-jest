@@ -36,4 +36,26 @@ describe('jest', () => {
 
         assert.equal(op.sumAccounts(['a', 'b', 'c']), 2);
     });
+
+    it('should retry getting account on network failures', () => {
+        let first = true;
+        accountStore.getAccountById.mockImplementation((id: string) => {
+            if (id === 'a') return account1;
+            if (id === 'b' && first) { first = false; throw new Error('NetworkError'); }
+            if (id === 'b' && !first) return account2;
+            if (id === 'c') return account3;
+            throw new Error('not found');
+        });
+        assert.equal(op.sumAccounts(['a', 'b', 'c']), 3);
+    });
+
+    it('should fail on other errors', () => {
+        accountStore.getAccountById.mockImplementation((id: string) => {
+            if (id === 'a') return account1;
+            if (id === 'b') throw new Error('OtherError');
+            if (id === 'c') return account3;
+            throw new Error('not found');
+        });
+        assert.throws(() => op.sumAccounts(['a', 'b', 'c']));
+    });
 });
