@@ -1,0 +1,23 @@
+{
+  "name": "ts-mockito-vs-jest",
+  "version": "1.0.0",
+  "description": "Compare ts-mockito to jest",
+  "main": "index.js",
+  "author": "johan.blumenberg@symphony.com",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/assert": "^1.4.3",
+    "@types/jest": "^24.0.22",
+    "assert": "^2.0.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "ts-mockito": "npm:@johanblumenberg/ts-mockito@^1.0.0",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "tslib": "^1.10.0"
+  }
+}

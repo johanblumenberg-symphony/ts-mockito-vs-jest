@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "reactNamespace": "React",
+    "target": "es5",
+    "lib": ["es5", "es6", "es7", "dom"],
+    "downlevelIteration": true,
+    "jsx": "react",
+
+    "pretty": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "noStrictGenericChecks": false,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "resolveJsonModule": true,
+  }
+}
