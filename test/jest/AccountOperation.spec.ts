@@ -83,7 +83,7 @@ describe('jest', () => {
             throw new Error('not found');
         });
         assert.throws(() => op.sumAccounts(['a', 'b']), 'failed to fetch b');
-        expect(logger.logAccount).not.toHaveBeenCalledWith('b');
+        expect(logger.logAccount).not.toHaveBeenCalledWith('b', 'master');
     });
 
     it('should always add the master account', () => {
