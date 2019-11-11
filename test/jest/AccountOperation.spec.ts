@@ -71,8 +71,8 @@ describe('jest', () => {
     it('should log the involved accounts', () => {
         assert.equal(op.sumAccounts(['a', 'b']), 2);
         expect(logger.logAccount).toHaveBeenCalledTimes(3);
-        expect(logger.logAccount).toHaveBeenCalledWith('a');
-        expect(logger.logAccount).toHaveBeenCalledWith('b');
+        expect(logger.logAccount).toHaveBeenCalledWith('a', 'master');
+        expect(logger.logAccount).toHaveBeenCalledWith('b', 'master');
     });
 
     it('should not log failing accounts', () => {
