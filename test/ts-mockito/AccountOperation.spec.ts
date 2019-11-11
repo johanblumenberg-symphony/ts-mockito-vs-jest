@@ -61,14 +61,14 @@ describe('ts-mockito', () => {
 
     it('should log the involved accounts', () => {
         assert.equal(op.sumAccounts(['a', 'b']), 2);
-        verify(logger.logAccount('a')).once();
-        verify(logger.logAccount('b')).once();
+        verify(logger.logAccount('a', 'master')).once();
+        verify(logger.logAccount('b', 'master')).once();
     });
 
     it('should not log failing accounts', () => {
         when(accountStore.getAccountById('b')).thenThrow(new Error('OtherError'));
         assert.throws(() => op.sumAccounts(['a', 'b']), 'failed to fetch b');
-        verify(logger.logAccount('b')).never();
+        verify(logger.logAccount('b', 'master')).never();
     });
 
     it('should always add the master account', () => {
