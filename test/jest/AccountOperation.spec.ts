@@ -30,4 +30,10 @@ describe('jest', () => {
     it('should sum the balance of given accounts', () => {
         assert.equal(op.sumAccounts(['a', 'b', 'c']), 3);
     });
+
+    it('should not include negative balances', () => {
+        account2.balance = -1;
+
+        assert.equal(op.sumAccounts(['a', 'b', 'c']), 2);
+    });
 });

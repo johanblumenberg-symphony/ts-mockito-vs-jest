@@ -10,7 +10,9 @@ export class AccountOperationImpl implements AccountOperation {
         for (let id of accountIds ) {
             let account = this._store.getAccountById(id);
             console.log('got ' + (account && account.balance));
-            sum += account.balance;
+            if (account.balance > 0) {
+                sum += account.balance;
+            }
         }
 
         return sum;
