@@ -1,5 +1,5 @@
 export interface Logger {
-    logAccount(id: string);
+    logAccount(master: string, id: string);
 
     logUser(id: string): void;
     logChair(): void;

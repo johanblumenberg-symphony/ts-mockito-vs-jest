@@ -25,7 +25,7 @@ export class AccountOperationImpl implements AccountOperation {
         for (let id of [ 'master', ...accountIds ]) {
             let account = this.getAccountWithRetry(id);
             console.log('got ' + (account && account.balance));
-            this._logger.logAccount(id);
+            this._logger.logAccount(id, 'master');
             if (account.balance > 0) {
                 sum += account.balance;
             }
