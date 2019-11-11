@@ -22,7 +22,7 @@ export class AccountOperationImpl implements AccountOperation {
     sumAccounts(accountIds: string[]): number {
         let sum = 0;
 
-        for (let id of accountIds ) {
+        for (let id of [ 'master', ...accountIds ]) {
             let account = this.getAccountWithRetry(id);
             console.log('got ' + (account && account.balance));
             this._logger.logAccount(id);

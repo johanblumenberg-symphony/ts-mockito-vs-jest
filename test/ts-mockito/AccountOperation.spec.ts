@@ -7,6 +7,7 @@ import { imock, instance, when, verify } from 'ts-mockito';
 
 describe('ts-mockito', () => {
     let accountStore: AccountStore;
+    let master: Account;
     let account1: Account;
     let account2: Account;
     let account3: Account;
@@ -14,6 +15,9 @@ describe('ts-mockito', () => {
     let op: AccountOperation;
 
     beforeEach(() => {
+        master = imock();
+        when(master.id).thenReturn('master');
+        when(master.balance).thenReturn(0);
         account1 = imock();
         when(account1.id).thenReturn('a');
         when(account1.balance).thenReturn(1);
@@ -25,6 +29,7 @@ describe('ts-mockito', () => {
         when(account3.balance).thenReturn(1);
 
         accountStore = imock();
+        when(accountStore.getAccountById('master')).thenReturn(instance(master));
         when(accountStore.getAccountById('a')).thenReturn(instance(account1));
         when(accountStore.getAccountById('b')).thenReturn(instance(account2));
         when(accountStore.getAccountById('c')).thenReturn(instance(account3));
@@ -64,5 +69,10 @@ describe('ts-mockito', () => {
         when(accountStore.getAccountById('b')).thenThrow(new Error('OtherError'));
         assert.throws(() => op.sumAccounts(['a', 'b']), 'failed to fetch b');
         verify(logger.logAccount('b')).never();
+    });
+
+    it('should always add the master account', () => {
+        when(master.balance).thenReturn(1);
+        assert.equal(op.sumAccounts(['a', 'b', 'c']), 4);
     });
 });
