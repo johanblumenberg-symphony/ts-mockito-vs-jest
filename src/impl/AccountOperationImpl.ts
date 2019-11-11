@@ -1,8 +1,9 @@
 import { AccountOperation } from "../AccountOperation";
 import { AccountStore, Account } from "../AccountStore";
+import { Logger } from "../Logger";
 
 export class AccountOperationImpl implements AccountOperation {
-    constructor(private _store: AccountStore) {}
+    constructor(private _store: AccountStore, private _logger: Logger) {}
 
     private getAccountWithRetry(id: string): Account {
         while(true) {
@@ -24,6 +25,7 @@ export class AccountOperationImpl implements AccountOperation {
         for (let id of accountIds ) {
             let account = this.getAccountWithRetry(id);
             console.log('got ' + (account && account.balance));
+            this._logger.logAccount(id);
             if (account.balance > 0) {
                 sum += account.balance;
             }

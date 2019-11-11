@@ -2,13 +2,15 @@ import * as assert from 'assert';
 import { AccountOperation } from '../../src/AccountOperation';
 import { AccountOperationImpl } from '../../src/impl/AccountOperationImpl';
 import { AccountStore, Account } from '../../src/AccountStore';
-import { imock, instance, when } from 'ts-mockito';
+import { Logger } from '../../src/Logger';
+import { imock, instance, when, verify } from 'ts-mockito';
 
 describe('ts-mockito', () => {
     let accountStore: AccountStore;
     let account1: Account;
     let account2: Account;
     let account3: Account;
+    let logger: Logger;
     let op: AccountOperation;
 
     beforeEach(() => {
@@ -27,7 +29,9 @@ describe('ts-mockito', () => {
         when(accountStore.getAccountById('b')).thenReturn(instance(account2));
         when(accountStore.getAccountById('c')).thenReturn(instance(account3));
 
-        op = new AccountOperationImpl(instance(accountStore));
+        logger = imock();
+
+        op = new AccountOperationImpl(instance(accountStore), instance(logger));
     });
 
     it('should sum the balance of given accounts', () => {
@@ -48,5 +52,17 @@ describe('ts-mockito', () => {
     it('should fail on other errors', () => {
         when(accountStore.getAccountById('b')).thenThrow(new Error('OtherError'));
         assert.throws(() => op.sumAccounts(['a', 'b', 'c']), 'failed to fetch b');
+    });
+
+    it('should log the involved accounts', () => {
+        assert.equal(op.sumAccounts(['a', 'b']), 2);
+        verify(logger.logAccount('a')).once();
+        verify(logger.logAccount('b')).once();
+    });
+
+    it('should not log failing accounts', () => {
+        when(accountStore.getAccountById('b')).thenThrow(new Error('OtherError'));
+        assert.throws(() => op.sumAccounts(['a', 'b']), 'failed to fetch b');
+        verify(logger.logAccount('b')).never();
     });
 });

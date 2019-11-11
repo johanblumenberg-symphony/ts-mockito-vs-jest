@@ -3,12 +3,14 @@ import { AccountOperation } from '../../src/AccountOperation';
 import { AccountOperationImpl } from '../../src/impl/AccountOperationImpl';
 import { AccountStoreMock } from './__mocks__/AccountStore.mock';
 import { AccountMock } from './__mocks__/Account.mock';
+import { LoggerMock } from './__mocks__/Logger.mock';
 
 describe('jest', () => {
     let accountStore: AccountStoreMock;
     let account1: AccountMock;
     let account2: AccountMock;
     let account3: AccountMock;
+    let logger: LoggerMock;
     let op: AccountOperation;
 
     beforeEach(() => {
@@ -24,7 +26,9 @@ describe('jest', () => {
             throw new Error('not found');
         });
 
-        op = new AccountOperationImpl(accountStore);
+        logger = new LoggerMock();
+
+        op = new AccountOperationImpl(accountStore, logger);
     });
 
     it('should sum the balance of given accounts', () => {
@@ -57,5 +61,22 @@ describe('jest', () => {
             throw new Error('not found');
         });
         assert.throws(() => op.sumAccounts(['a', 'b', 'c']));
+    });
+
+    it('should log the involved accounts', () => {
+        assert.equal(op.sumAccounts(['a', 'b']), 2);
+        expect(logger.logAccount).toHaveBeenCalledTimes(2);
+        expect(logger.logAccount).toHaveBeenCalledWith('a');
+        expect(logger.logAccount).toHaveBeenCalledWith('b');
+    });
+
+    it('should not log failing accounts', () => {
+        accountStore.getAccountById.mockImplementation((id: string) => {
+            if (id === 'a') return account1;
+            if (id === 'b') throw new Error('OtherError');
+            throw new Error('not found');
+        });
+        assert.throws(() => op.sumAccounts(['a', 'b']), 'failed to fetch b');
+        expect(logger.logAccount).not.toHaveBeenCalledWith('b');
     });
 });
